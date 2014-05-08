@@ -27,6 +27,11 @@ Board::Board(Board& source) : currentPlayer(source.getTurn())
 
 void Board::play(size_t space)
 {
+	if (find(emptySpaces.begin(), emptySpaces.end(), space) == emptySpaces.end())
+	{
+		cout << "Invalid move.\n";
+		return;
+	}
 	SpaceType move = currentPlayer == Player ? X : O;
 	spaces[space] = move;
 	emptySpaces.erase(std::remove(emptySpaces.begin(), emptySpaces.end(), space), emptySpaces.end());
@@ -97,24 +102,13 @@ int Board::reward(int depth)
 		return (1 << (8 - depth)) * win;
 	}
 
-	vector<int> rewards;
+	int sum = 0;
+
 	for (int i = 0; i < emptySpaces.size(); ++i)
 	{
 		Board board(*this);
 		board.play(emptySpaces[i]);
-		int reward = board.reward(depth + 1);
-		rewards.push_back(reward);
-	}
-	int max = -1 * (1 << 10);
-	int sum = 0;
-
-	for (int i = 0; i < rewards.size(); ++i)
-	{
-		sum += rewards[i];
-		if (rewards[i] > max)
-		{
-			max = rewards[i];
-		}
+		sum += board.reward(depth + 1);
 	}
 
 	return sum / (depth + 1);
