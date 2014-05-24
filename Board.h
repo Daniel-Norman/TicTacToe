@@ -10,11 +10,11 @@ using namespace std;
 class Board
 {
 public:
-	enum SpaceType {X, O, Empty};
-	enum PlayerType {Player, Computer};
+	enum SpaceType { X, O, Empty };
+	enum PlayerType { Player, Computer };
 
 	Board(PlayerType);
-	Board(Board&);
+	Board(Board*);
 	void play(size_t);
 	void computerPlay();
 	int checkWin();
@@ -32,5 +32,5 @@ private:
 	vector<int> emptySpaces;
 	char* display(int);
 
-	int reward(int);
+	int reward(int = 0);
 };
